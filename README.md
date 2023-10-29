@@ -4,9 +4,11 @@ Sistema bancário e financeiro para o N.W.M-RPG.
 
 """
 READ-ME:
-    Versão: {versao}
-    v 1.2.3 = controles: adicionado classes dentro de cada seção.
-    v 1.2.1 = código "Funcs", separado do código "Banco". Uso por import
+    \nVersão: {versao}
+    
+    \nv 1.2.3 = controles: adicionado classes dentro de cada seção.
+    
+    \nv 1.2.1 = código "Funcs", separado do código "Banco". Uso por import
     v 1.2.0 = código "controles" separado do codigo "Banco" (uso por import)
     v 1.1.9 = var mundial lideres
     v 1.1.8 = var mundial reinantes
