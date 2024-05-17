@@ -1,5 +1,6 @@
 from typing import List, Any
 
+nome_arquivo = "registro/registro.xlsx" 
 
 def localizar_arquivo(text=False, nome_arquivo=nome_arquivo, modo='rb', pandas=False):
 	"""
