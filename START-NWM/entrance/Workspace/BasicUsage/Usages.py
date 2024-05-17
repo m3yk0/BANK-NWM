@@ -1,6 +1,7 @@
 from __future__ import annotations
 from entrance import funcionamento_basico
 
+nome_Arquivo = "/registro/registro.xlsx" 
 
 if funcionamento_basico is True:
 	lideres = {'tsuki': '≠±¬°°≈‹Susumo Tsuki', 'inu': 'Meeh Inu', 'ivory': '~€±±☆≈≈≠•¬¬¬¬¬‹‹‹‹‹°°°¤@Meyko Ivory',
@@ -15,8 +16,7 @@ def sair():
 	exit()
 
 
-def ver_contas(tipo_do_registro='Completo',
-			   nome_arquivo='/Users/terencepettine/Desktop/BACKUP MACOS 4.2024/PYTHONCODES/START-NWM/entrance/registro/registro.xlsx',
+def ver_contas(tipo_do_registro=nome_arquivo,
 			   vars=False):
 	"""
 	Opção de visualizar na tela(sys.stdout) o arquivo 'registro.xlsx' no modo 'contas' (dict para uso do programa) em estética decorada e informativa.
@@ -187,7 +187,7 @@ def ver_contas(tipo_do_registro='Completo',
 
 
 def cadastrar_pandasdf(
-		nome_arquivo='/Users/terencepettine/Desktop/BACKUP MACOS 4.2024/PYTHONCODES/START-NWM/entrance/registro/registro.xlsx',
+		nome_arquivo=nome_arquivo,
 		section=None, cla=None, grana=None, EXP=None, name=None, contas=None, salve_in_archive=True):
 	"""
 	cadastra um novo indivíduo.
@@ -284,7 +284,7 @@ def cadastrar_pandasdf(
 
 
 
-def verificar_presença(registro='/Users/terencepettine/Desktop/BACKUP MACOS 4.2024/PYTHONCODES/START-NWM/entrance/registro/registro.xlsx', nome_sect=None, nome_cla=None, nome_pp=None, oque_procurar: None | int = None):
+def verificar_presença(registro=nome_arquivo, nome_sect=None, nome_cla=None, nome_pp=None, oque_procurar: None | int = None):
 	"""
 
 	Args:
@@ -364,7 +364,7 @@ def verificar_presença(registro='/Users/terencepettine/Desktop/BACKUP MACOS 4.2
 			return False
 
 
-def remover_conta(nome_arquivo='/Users/terencepettine/Desktop/BACKUP MACOS 4.2024/PYTHONCODES/START-NWM/entrance/registro/registro.xlsx', contas=None, save_in_archive=False):
+def remover_conta(nome_arquivo=nome_arquivo, contas=None, save_in_archive=False):
 	from entrance.Workspace.Funcs import select_account_fc
 	from entrance.registro.manuseio import convet_xlsx_to_contas
 	# Obtem o registro em modo dicionário:
@@ -382,7 +382,7 @@ def remover_conta(nome_arquivo='/Users/terencepettine/Desktop/BACKUP MACOS 4.202
 		convert_contas_to_xlsx(contas, nome_arquivo=nome_arquivo, verificar=True)
 	return [contas, name, classe, section, person]
 
-def transferencia(nome_arquivo='/Users/terencepettine/Desktop/BACKUP MACOS 4.2024/PYTHONCODES/START-NWM/entrance/registro/registro.xlsx', contas=None, save_in_archive=False):
+def transferencia(nome_arquivo=nome_arquivo, contas=None, save_in_archive=False):
 	from entrance.Workspace.Funcs import select_account_fc, confirm
 	from entrance.registro.manuseio import convet_xlsx_to_contas
 	# Obtem o registro em modo dicionário:
