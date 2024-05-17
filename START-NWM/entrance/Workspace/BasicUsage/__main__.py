@@ -2,7 +2,7 @@ from entrance import funcionamento_basico
 from entrance import historico
 from entrance.Workspace.BasicUsage import Usages
 
-
+nome_arquivo = "registro\registro.xlsx"
 
 def main():
 	if funcionamento_basico is True:
@@ -58,13 +58,14 @@ def main():
 			if i == 0:
 				Usages.sair()
 			elif i == 1:
-				Usages.ver_contas(tipo_do_registro='Escolher', nome_arquivo='/Users/terencepettine/Desktop/BACKUP MACOS 4.2024/PYTHONCODES/START-NWM/entrance/registro/registro.xlsx')
+				Usages.ver_contas(tipo_do_registro='Escolher', nome_arquivo=nome_arquivo)
 			elif i == 4.1:
-				Usages.cadastrar_pandasdf(nome_arquivo='/Users/terencepettine/Desktop/BACKUP MACOS 4.2024/PYTHONCODES/START-NWM/entrance/registro/registro.xlsx', salve_in_archive=False)
+				Usages.cadastrar_pandasdf(salve_in_archive=False)
 			elif i == 4.2:
-				Usages.remover_conta(nome_arquivo='/Users/terencepettine/Desktop/BACKUP MACOS 4.2024/PYTHONCODES/START-NWM/entrance/registro/registro.xlsx', salve_in_archive=False)
+				Usages.remover_conta(
+ salve_in_archive=False)
 			elif i == 4.3:
-				Usages.transferencia(nome_arquivo='/Users/terencepettine/Desktop/BACKUP MACOS 4.2024/PYTHONCODES/START-NWM/entrance/registro/registro.xlsx', salve_in_archive=False)
+				Usages.transferencia(salve_in_archive=False)
 
 if __name__ == "__main__":
 	main()
