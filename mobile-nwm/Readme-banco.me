@@ -1,0 +1,158 @@
+# READ.ME2
+# BANK-NWM
+
+Sistema bancário e financeiro para o N.W.M-RPG.
+
+"""
+READ-ME:
+Versão: {versao}
+V 2.0.0 - START-NWM/entrance:
+            Workspace:
+                - Banco03.py  # Descontinuado
+                - Funcs.py, Intercal.py, controles.py  # 100% reformatado
+            BasicUsage:
+                - __main__.py  # terminal principal para execução do código
+                - Usages.pt  # funções usadas in main
+            registro:
+                - manuseio.py  # Manuseia 'registro.xlsx' com pandas
+                - registro.xlsx  # Arquivo de banco de dados principal
+            Store_fold: # ? / ainda não formatado.
+
+V 1.3.5 = Adicionado em 'controles.py', váriaveis 'propriedades' (itens dos ladinos) e 'contratos' (contratos dos ladinos)
+V 1.3.4 = Adicionado operação de pagar vários com mesmo saldo e EXP, com diferença da inflação (4.16)
+V 1.3.3 = adicionado operação de mudar nome de indivíduo (4.15)
+V 1.3.2 = - Adicionado opção de remover classe, aprimorada função de remoção de seções, account_fc() reformatado, secoes_func() reformatado
+V 1.3.1 =  - opção 7 e Função 9 em Banco02.py, atualizada, - função backups_fc em Funcs.py, atualizada
+    - var backups em controles.py, atualizada, - reg_selct para reg_select
+    - linhas que mostram 'dic_reg[data_reg]' substituido para 'dic_reg[data_select]'
+V 1.3.0 = PIB mudado para PIB_real, ETF mudado para PIB_Per_Capita, meta_selic mudado para Tesouro,
+    variáveis são declaradas mais próximo de onde são usadas agora. tot_fee era declarado como
+    "tot_fee += (taxa)", e agora é "+= (taxa / TBF)". Mudança necessária, pois tot_fee e IPCA mundial seriam
+    a mesma coisa. Agora, tot_fee, é a completa soma da taxa em porcenteagem do IPCA, e não o IPCA bruto.
+    - Aderido contagem particular das cotas positivas e negativas (controles e Funcs)
+    - tot_vpms para tot_pvms, etfpersec para PIB_Per_Capita_persec, - all_indiv para all_persons, - all_taxas para tot_fee
+    - tot_class para all_class
+    - Backup 'valor_mundial' para backup de 'leis', isto mudou em controles.py, banco02.pt e Funcs.py
+V 1.2.9 = TBF calculado em CONTROLES.PY refere ao valor usado no cálculo da fração do
+    IPCA. - - - INTERCAL.PY added "money_func, zero2" - - - "money_func, zero2" atualizados também em FUNCS.PY
+    e usado também em CONTROLES.PY.
+V 1.2.8 = adicionado variáveis ETF, IPCA, BOLSA DE VALORES
+V 1.2.7 = controles: adicionado PIB (Soma dos valores de todos os itens) 
+V 1.2.6 = controles: adicionado comando itens, lista de todos itens e valores do RPG 
+V 1.2.5 = operação número 3 tem nova função de mostrar valores de todos os reinos 
+V 1.2.4 = reforma das funções para atender a att v1.2.3
+v 1.2.3 = controles: adicionado classes dentro de cada seção.
+v 1.2.1 = código "Funcs", separado do código "Banco". Uso por import
+v 1.2.0 = código "controles" separado do codigo "Banco" (uso por import)
+v 1.1.9 = var mundial lideres
+v 1.1.8 = var mundial reinantes
+v 1.1.7 = data_reg virou var global
+v 1.1.6 = Operação numero 3 desligada.
+v 1.1.5 = Ao invés de reinos, as contas são separadas pelo nome "seções".
+v 1.1.4 = def valores adicionado taxa silic
+v 1.1.3 = def valores adicionado meta silic
+v 1.1.2 = def individuos e registros reformados
+v 1.1.1 = def reinos
+v 1.1.0 = Adicionado "reinos" em contas
+v 1.0.0 = Escolher registro antigo, como um principal (ctrl+z)
+v 0.2.9 = Agora não é mais possível um indivíduo negativado, realziar transferências bancárias.
+v 0.2.8 = Bug de seleção de indivpiduos, corrigido
+v 0.2.7 = Melhorias (nomes, váriaveis, contas.copy, etc)
+v 0.2.6 = Corrigido bugs de Backup
+v 0.2.5 = Melhorias (money de INT foi para FLOAT (2 casas) e EXP 1 casa), nome de vars mudados para sem acentos, algumas
+instruções PEP8 seguidas.
+v 0.2.4 = Corrigido bugs na operacao 3
+v 0.2.3 = Bloqueio de operacoes
+v 0.2.2 = def confirm()
+v 0.2.1 = def ver registros antigos
+v 0.2.0 = histórico de funções escolhidas pelo usuário
+v 0.1.9 = Func. individuos()
+v 0.1.8 = corrigindo func 'alternativa()'
+v 0.1.7 = correção de bugs
+v 0.1.6 = voltado base 0.1.4 + incrementos de função 'alternativa()' em cada funcao
+v 0.1.5 = cada alternativa = funcão
+v 0.1.4 = correção de português -
+v 0.1.1 = Opção 6 foi fechada (opc 1 já cumpria tal funcão)
+v 0.1.2 = programa aninhado em def main()
+v 0.1.3 = def confirm_input()
+
+    vars. constantes são em MAIUSCULO
+    vars. function em minusculo
+    classes em Titled (sem underlines)
+    >>> Todo código de operação é separado em 2 comentários:
+    #-- CÓDIGO --# == área do código
+    #-- FLAG --# == área da finalização bem-sucedida do código.
+        Em flag, sempre deve haver:
+        del váriaveis usadas na operação
+        end = z = True == representa que a operação foi finalizada
+        # end = TRUE == finalizado com sucesso
+        # end = FALSE == finalizado com falha entre a operação
+        # end = NONE = Operação em estado aberto/não finalizada.
+        historico.append([f"Concluído funcão {i}, para o registro {dic_reg}, as {data_atual}",
+                                      "desc: DESCRIÇÃO DA FUNÇÃO."])
+
+"""
+
+"""
+BUGS N RESOLVIDOS:
+
+    > Ao clicar 4.5, em.seguida errar a opcão, mas, outrora, selecionar individuo correto, vem um erro
+    > O mesmo para 4.4
+
+"""
+
+"""
+
+# armazenando o caminho do arquivo de módulos na variável file_path
+
+file_local = datetime.**file**
+
+# armazenando o diretório (caminho do adquivo) na variável dir
+
+dir = os.path.dirname(file_local)
+print(dir)
+
+def mod(tool):
+import os
+try:
+import tool
+mod = True
+print(f"{tool} instalado.")
+except ImportError:
+mod = False
+print(f" {tool} NÃO instalado. Aguarde...")
+if mod is False:
+a = os.system(f'pip install {tool}')
+print("Instalamos para você.\n", a )
+import datetime
+else:
+pass
+"""
+
+""" def salvar(filename, info):
+file = open('{}.csv'.format(filename),'a',encoding='UTF-8')
+file.write(info+'\n')
+file.close()
+
+    lis = [{"Meyko": [10.0, 1000.0]}]
+    salvar(lis, lis)
+
+    def ler(filename):
+        file = open('{}.csv'.format(filename),'r', encoding='UTF-8')
+        return file.read()
+
+"""
+
+"""
+AJUSTES RESTANTES:
+1 > Correção de bugs
+2> Firmar versão do python e dos modulos usados (se estão iguais ou atualizadas ao que o programa foi baseado)
+3> Importar e exportar as var principais (dic_reg,backup registros)
+4> Implementar o código em um backup automático (ou seja, automatizar o ajuste 3 citado acima, para que, sempre em algum
+momento do programa, salve o arquivo do relatório)
+5 > Talvez, manusear EXEL com este programa (ou faze-lo no exel quando estudado tal software)
+6 > divisão de clãs
+7 > Upar no Github
+8 > Usar no RPG!
+
+"""
