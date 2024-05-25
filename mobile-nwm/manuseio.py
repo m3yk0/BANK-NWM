@@ -2,8 +2,8 @@ import os.path as path
 from typing import List, Any
 
 dir = 'START-NWM/mobile-nwm'
-complete_dir = path.abspath(path.expanduser(path.expandvars(dir)))
-print(complete_dir)
+complete_dir = path.abspath(path.expanduser(path.expandvars(".")))
+
 
 def criar_arquivo(local='START-NWM/mobile-nwm', nome_arquivo='registro.xlsx', colunas=[ '', 'REINO', 'CLASSE', 'PERSON', 'MONEY', 'EXP' ], mini_data=[['reino da folha', 'inu', 'meeh', 0, 0]], pandas=False):
 	"""
@@ -171,9 +171,10 @@ def valuestolist(operation=None, df=False, contas={'reino da folha': {'inu': {'m
 					money = saldo[ 0 ]
 					exp = saldo[ 1 ]
 					ValuesToList.append(
-						[ str(reino).lower().strip(), str(classe).lower().strip(), str(name).lower().strip(),
-						  str(money).lower().strip(), str(exp).lower().strip() ])
+						[ str(reino).lower().strip(), str(classe).lower().strip(), str(name).lower().strip(),  str(money).lower().strip(), str(exp).lower().strip() ])
 					c += 1
+		vtl = ValuesToList
+		#print(f"{ValuesToList =} ")
 	elif operation == 2:
 		"""string(contas) to VTL"""
 		contas = str(contas)
@@ -289,9 +290,9 @@ def convert_contas_to_xlsx(contas={'reino da folha': {'inu': {'meeh': [ 0, 0 ]}}
 	if type(contas) == type(str()):
 		operation = 2
 	elif type(contas) == type(dict()):
-		operation = 3
+		operation = 1
 	else:
-		print(F"A variáel 'contas' não está correta.")
+		print(F"A variável 'contas' não está correta.")
 		return None
 	ValuesToList = valuestolist(operation, contas=contas)[-1]
 	df = DataFrame(ValuesToList, columns=colunas)
@@ -301,7 +302,7 @@ def convert_contas_to_xlsx(contas={'reino da folha': {'inu': {'meeh': [ 0, 0 ]}}
 	b = df.to_excel(writer)
 	colunas_atuais = list(df.columns)
 	if colunas_atuais != colunas:
-		print(f"Houve uma mudança nas colunas do arquivo: {colunas_atuais=}. Isto pode impactar em incompatibilidades "
+		print(f"\nHouve uma mudança nas colunas do arquivo: {colunas_atuais=}. Isto pode impactar em incompatibilidades "
 			  "em outras funções. Ajuste o arquivo, ou lembre-se de ajustar o parâmetro 'colunas' de cada função que as usa.")
 	c = writer.close()
 	# Verifica se deu certo:
@@ -310,6 +311,10 @@ def convert_contas_to_xlsx(contas={'reino da folha': {'inu': {'meeh': [ 0, 0 ]}}
 			contas2 = convet_xlsx_to_contas(nome_arquivo=nome_arquivo)
 			if contas2 == contas:
 				print(f"Arquivo foi atualizado com sucesso.")
+				for letra in str(contas):
+					for letra2 in str(contas2):
+						if letra != letra2:
+							print(letra, end="")
 			else:
 				print(f"O arquivo não foi atualizado corretamente.")
 				print(f"{contas=}\n{contas2=}\n Iguais?: {contas==contas2=}")
@@ -323,12 +328,13 @@ def convert_contas_to_xlsx(contas={'reino da folha': {'inu': {'meeh': [ 0, 0 ]}}
 						worksheet.write(row_num, col_num, col_data)
 				workbook.close()'''
 		verificar()
+	return 
 
 
 
 def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup=[['REG', '22/05/2024-14:00:01', {'none': {'none': {'none': ['none', 'none']}}}]]):
 	"""
-
+	operações sobre o arquivo BACKUP.txt, cujo armazena registros antigos e outras variáveis. 
 	Args:
 		operation: str | int
 			'C' | 1 | 'CAPTURE' == capturar backup
@@ -372,6 +378,7 @@ def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup
 			WriteBackup = WriteBackup.join(line)
 		return WriteBackup.replace('\n\n', '')
 
+
 	def strB_to_listbackup(strBackup):
 		"""
 		convert strBackup into a ListBackup
@@ -401,6 +408,7 @@ def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup
 				print(f"strB_to_listbackup - {ListBackup = }")
 		return ListBackup
 
+
 	def capture_bc():
 		"""Captura BACKUP.txt retornando ListBackup, e cria caso não exista"""
 		if local is None:
@@ -419,6 +427,7 @@ def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup
 			print(f"{ListBackup = }")
 		return ListBackup
 
+
 	def format_bc():
 		"""escreve em BACKUP.txt retornando WriteBackup, e cria caso não exista"""
 		LB_antigo = capture_bc()
@@ -434,7 +443,7 @@ def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup
 		# Converte ListBackup object em objetos de gravação
 		strBackup = LB_to_strbackup(ListBackup)
 		WriteBackup = strB_to_writebackup(strBackup)
-		print(f"{strBackup=}\n{WriteBackup=}\n{ListBackup=}\n{LB_antigo = }")
+		print(f" {strBackup=}\n{WriteBackup=}\n{ListBackup=}\n{LB_antigo = }")
 		if op in ['2', 'A', 'ADD']:
 			adicionados = []
 			with open(complete_archive, 'a') as arq:
@@ -452,206 +461,3 @@ def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup
 	elif op in ['2', 'A', 'ADD', '3', 'F', 'FORMAT']: # Salvar Backup
 		return format_bc()
 
-
-bp = manuseio_backup(operation='c')
-print(f"{bp=}")
-
-
-"""
-
-	import xlsxwriter
-	workbook = xlsxwriter.Workbook('registroS.xlsx')
-	print(workbook.worksheets())
-	worksheet = workbook.add_worksheet()
-	print(workbook.worksheets())
-	for row_num, row_data in enumerate(ValuesToList):
-		for col_num, col_data in enumerate(row_data):
-			worksheet.write(row_num, col_num, col_data)
-	workbook.close()
-
-	# creating an ExcelWriter object
-	with ExcelWriter(nome_arquivo) as arq:
-		#searchs: df[df['PERSON']] == 'klas inu' OR df.iloc[df['PERSON'].searchsorted('klas inu')]
-		arquivo = df.to_excel(arq)
-	df = [df, arq]
-	return [ arquivo, df, ValuesToList ]
-	
-	try:
-		try:
-			with open(nome_arquivo, mode=modo) as arq:
-				arquivo = df.to_excel(arq)
-			return [ arquivo, df, ValuesToList ]
-		except Exception as msg:
-			print(msg)
-	except:
-		print(f"Tentativa 2")
-	try:
-		try:
-			from pandas import ExcelWriter
-			exl = ExcelWriter(nome_arquivo)
-			arquivo = df.to_excel(exl)
-			exl.close()
-		except Exception as msg:
-			print(msg)
-	except:
-		print(f"Tentativa 3")
-	try:
-		from pandas import ExcelWriter
-		# creating an ExcelWriter object
-		with ExcelWriter(nome_arquivo) as writer:
-			# writing to the 'Employee' sheet
-			df.to_excel(writer, sheet_name='Employee', index=False)
-	except:
-		pass"""
-
-'''
-
-class Manuseio():
-
-	def __int__(self, colunas=None, nome_arquivo=None):
-		if funcionamento_basico is True:
-			colunas = [ 'REINO', 'CLASSE', 'PERSON', 'MONEY', 'EXP' ]
-			nome_arquivo = 'registro.xlsx'
-		else:
-			colunas = [ 'REINO', 'CLASSE', 'PERSON', 'MONEY', 'EXP' ]
-			nome_arquivo = 'super-registro.xlsx'
-
-
-	def localizar_arquivo(self, text=False):
-		"""
-		localiza o arquivo de registro de pps necessário para o uso básico do programa.
-		Args:
-			text: True == printa os textos
-
-		Returns: list(
-			create_file # create_file bool. If True == o arquivo <nome_arquivo> precisa ser criado. False == <nome_arquivo> já joi criado no <patch_atual>
-			patch_atual # diretório onde o arquivo manuseio.py está rodando.
-			patch_esperado # local onde <nome_arquivo> deve ser encontrado
-			correspondencia # expressa se <patch_esperado> corresponde ao <patch_atual>
-			onde_ir # patch correspondente a onde <nome_arquivo> deve estar
-			arquivo_retornado # None == Significa que arquivo ainda não foi encontrado. != (diferente de None) então o arquivo foi criado e se refere ao arquivo então.
-			)
-		"""
-		create_file = None  # True = precisa criar o diretorio/arquivo, False = não precisa, já existe.
-		patch_esperado = correspondencia = '/START-NWM/entrance/registro'
-		onde_ir = os.path.dirname(os.path.abspath('registro/' + nome_arquivo))
-		patch_atual = os.getcwd()
-		arquivo_retornado = None
-		if patch_esperado in onde_ir:
-			patch_esperado = onde_ir
-		if correspondencia in patch_atual:
-			try:
-				arquivo_retornado = open(nome_arquivo, 'rb')
-				create_file = False
-			except FileNotFoundError as msg:
-				if text is True:
-					print(f"O arquivo de registro não foi localizado, iremos criar um 'em branco'...")
-				create_file = True
-		else:
-			if text is True:
-				print(f"O diretório atual não é o diretório esperado para correr o script manuseio.py corretamente.")  # MSG
-				print(f"Diretório atual: {patch_atual}\n Diretório esperado: {patch_esperado}")  # INFO
-				print(f"Tente encontrar ou então criar o diretório esperado, alocar o arquivo 'manuseio.py'")  # SOLUTION
-				print(f"Este erro pode ser evitado caso siga o código do github. Caso esteja realmente seguindo o código do github sem quaisquer mudanças e esteja vendo este erro, crie um 'issue'.")  # COMMENT
-			create_file = True
-		return [ create_file, patch_atual, patch_esperado, correspondencia, onde_ir, arquivo_retornado ]
-
-
-	def criar_arquivo(self):
-		create_file, patch_atual, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo()
-		# print(f"ATUAL: {patch_atual}\nONDE_IR {onde_ir}")
-		if create_file is True and correspondencia in patch_atual:
-			# Crie o arquivo e Insere dados básicos:
-			df = pd.DataFrame(data=[ [ 'Folha', 'Inu', 'Meeh', 0, 0 ] ], columns=colunas)
-			df.to_excel(nome_arquivo)
-			arquivo_retornado = localizar_arquivo()[ -1 ]
-			create_file = False
-			if arquivo_retornado is None:
-				print(f'ATENÇÃO: Não conseguimos construir o arquivo: {nome_arquivo} no diretório atual ({patch_atual}). O programa pode então não funcionar corretamente.')
-		elif create_file is True and correspondencia not in patch_atual:
-			print(f'É necessário encontrar ou criar o diretório {patch_esperado}. ')
-		return create_file
-
-
-	def obter_arquivo(self):
-		# Captura do registro bancário:
-		for tentativa in range(1, 4):
-			print(f"{tentativa=}")
-			if tentativa == 1:
-				create_file, patch_atual, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo(text=True)
-				if create_file is False:
-					break
-			elif tentativa == 2:
-				create_file = criar_arquivo()
-				if create_file is False:
-					create_file, patch_atual, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo()
-					break
-			else:
-				#Tenta ultima vez no modo básico:
-				funcionamento_basico = True
-				colunas = [ 'REINO', 'CLASSE', 'PERSON', 'MONEY', 'EXP' ]
-				nome_arquivo = 'registro.xlsx'
-				create_file, patch_atual, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo(text=True)
-				if create_file is True:
-					c_file = criar_arquivo()
-					if c_file is True:
-						print(f"Não foi possivel continuar o programa pois houve problemas na captura do registro.")
-						# exit & break
-				print(f"Conseguimos tratar problemas de inicialização nivel 1 do programa e botamos o script em modo básico.")
-				return None
-				#breakpoint()
-				break
-		arquivo_retornado = arquivo_retornado
-		create_file = create_file
-		return arquivo_retornado if create_file is False else None
-
-
-	def convet_xlsx_to_contas(self):
-		if obter_arquivo() is None:
-			print(f"Código tentará continuar mesmo com problemas.")
-		# Pega o arquivo 'registro.xlsx'
-		with open(nome_arquivo, 'rb') as arquivo:
-			df = pd.read_excel(arquivo, header=0)
-			colunas_atuais = list(pd.read_excel(arquivo, nrows=0).columns.values.tolist())
-			ValuesToList = df.values.tolist()
-		# Converte para uso:
-		reinos = {}
-		for line in ValuesToList:
-			reino = line[ 0 ]
-			classe = line[ 1 ]
-			pp = line[ 2 ]
-			money = line[ 3 ]
-			exp = line[ 4 ]
-			if reino == 'Folha':
-				if classe == 'Ivory':
-					reinos[ 'Folha' ] = {'Ivory': {pp: [ money, exp ]}}
-				if classe == 'Tsuki':
-					reinos[ 'Folha' ].update({'Tsuki': {pp: [ money, exp ]}})
-			if reino == 'Chuva':
-				if classe == 'Runbon':
-					reinos[ 'Chuva' ] = {"Runbon": {pp: [ money, exp ]}}
-		contas = reinos
-		return reinos
-
-
-	def convert_contas_to_xlsx(self, contas={'Folha': {'Inu': {'Meeh': [0, 0]}}}):
-		# Converte para xlsx:
-		ValuesToList = [ ]
-		for reino, classes in contas.items():
-			for classe, person in classes.items():
-				for name, saldo in person.items():
-					money = saldo[ 0 ]
-					exp = saldo[ 1 ]
-					ValuesToList.append([ reino, classe, name, money, exp ])
-		# print(ValuesToList)
-		df = pd.DataFrame(ValuesToList, columns=colunas)
-		arquivo = df.to_excel(nome_arquivo)
-		arquivo = arquivo
-		contas_df = df
-		ValuesToList = ValuesToList
-		return [arquivo, df, ValuesToList]
-
-Manusear = Manuseio
-Manusear()
-Manusear().obter_arquivo()
-'''
