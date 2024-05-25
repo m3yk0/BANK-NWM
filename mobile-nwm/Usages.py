@@ -1,6 +1,10 @@
 from __future__ import annotations
 from __init__ import funcionamento_basico
 from manuseio import localizar_arquivo
+from babel.numbers import format_currency
+
+#format_currency(1234.5, '', locale='pt_br')
+
 
 if funcionamento_basico is True:
 	lideres = {'tsuki': '≠±¬°°≈‹Susumo Tsuki', 'inu': 'Meeh Inu', 'ivory': '~€±±☆≈≈≠•¬¬¬¬¬‹‹‹‹‹°°°¤@Meyko Ivory',
@@ -8,8 +12,7 @@ if funcionamento_basico is True:
 			   'terepasu': 'None', 'yoso': 'None', 'kokyu': 'None', 'kieta': 'None', 'runbon': '≈Shi Runbon',
 			   'kurai': '≈Ninguem Kurai', 'senko': 'None', 'kori': 'None', 'same': 'None', 'shio': 'None'}
 
-loca = localizar_arquivo(criar=True, test_open=True, text=False, dir='START-NWM/mobile-nwm',
-						 arquivo='registro.xlsx')
+loca = localizar_arquivo(criar=True, test_open=True, text=False, dir='START-NWM/mobile-nwm', arquivo='registro.xlsx')
 nome_arquivo = loca[ 2 ]
 
 
@@ -40,8 +43,6 @@ def ver_contas(tipo_do_registro='Completo',
 	# Obtem o registro em modo dicionário:
 	if type(contas) != type(dict()):
 		contas = convet_xlsx_to_contas(nome_arquivo=nome_arquivo)
-	from locale import setlocale, LC_MONETARY
-	setlocale(LC_MONETARY, 'pt_br')
 
 	def ver_reg_completo():
 		from controles import values_fc, fee_fc, capta_fc, pib_real_fc, list_persons_fc
@@ -68,14 +69,14 @@ def ver_contas(tipo_do_registro='Completo',
 				if contas[ secao ].values().__len__() > 0:  # Caso seção tenha classes , então mostra:
 					print(f"""\n	━━━━━━━━━  ✠  ━━━━━━━━━\n""")
 					print(f"""*●-  -=- {secao.upper()} -=-    -●*\n""",
-						  f""" ፧⠂ *PVMS do Reino:* {currency(float(moneypersec[ secao ]))}$\n""",
+						  f""" ፧⠂ *PVMS do Reino:* {format_currency(float(moneypersec[ secao ]), '' , locale='pt_br' )}$\n""",
 						  """ ፧⠂ *Taxa Selic do Reino:* {}\n""".format(
-							  currency(float(moneypersec[ secao ] - PIB_Per_Capita_persec[ secao ]))),
-						  F""" ፧⠂ *IPCA:* {currency(float(ipcapersec[ secao ]))}% _({'Taxa Selic negativa: some +IPCA% em suas compras (inflação)' if feepersec[ secao ] < 0 else 'Taxa selic positiva: diminua -IPCA% em suas compras (deflação)'})_\n""",
+							  format_currency(float(moneypersec[ secao ] - PIB_Per_Capita_persec[ secao ]), '' , locale='pt_br' )),
+						  F""" ፧⠂ *IPCA:* {format_currency(float(ipcapersec[ secao ]), '' , locale='pt_br' )}% _({'Taxa Selic negativa: some +IPCA% em suas compras (inflação)' if feepersec[ secao ] < 0 else 'Taxa selic positiva: diminua -IPCA% em suas compras (deflação)'})_\n""",
 						  # """ ፧⠂ *PIB_Per_Capita:* {}\n""".format(f"{money_func(PIB_real / totcontpersec[ secao ])}" if totcontpersec[secao ] > 0 else f"{money_func(00)}"),
 						  """ ፧⠂ *PIB Nominal Per Capita:* {}\n""".format(
-							  f"{currency(float(PIB_Nominal_persec[ secao ]))}"),
-						  F""" ፧⠂ *BOLSA da seção:* {currency(float(bolsapersec[ secao ]))} \n""",
+							  f"{format_currency(float(PIB_Nominal_persec[ secao ]), '' , locale='pt_br' )}"),
+						  F""" ፧⠂ *BOLSA da seção:* {format_currency(float(bolsapersec[ secao ]), '' , locale='pt_br' )} \n""",
 						  f""" ፧⠂ *Leis:* {'Barradas' if prevent(store.reinantes, secao) == 'None' else 'Ativas'}\n""",
 						  f""" ፧⠂ *Classes:* {iterar(prevent(store.classes_c2, secao)) if prevent(store.classes_c2, secao) != 'None' else 'None'}\n""",
 						  F""" ፧⠂ *Total de contas:* {len(totcontpersec[ secao ])}\n""")
@@ -93,37 +94,37 @@ def ver_contas(tipo_do_registro='Completo',
 								print(f"""*Líder:* {prevent(store.lideres, classe).title()}""")
 							for name, saldo in persons.items():
 								if name != 'none' and 'none' != saldo:
-									print(f"\n - {name.title()}: ", end="")
+									print(f"\n -- {name.title()}: ", end="")
 									for index, val in enumerate(saldo):
 										if val != 'none':
 											val = float(val)
-											print(f" {currency(val)}{'$ / ' if (index % 2) == 0 else 'EXP'}", end="")
+											print(f" {format_currency(val, '' , locale='pt_br' )}{'$ / ' if (index % 2) == 0 else 'EXP'}", end="")
 										else:
 											print(f" 0,0 ")
 							print(f"""\n		-━━━━━━━━━  ✠  ━━━━━━━━━-\n""")
 		temp = pib_real_fc()
-		PIB_real, TBF = temp[ 0 ], temp[ 1 ]
+		PIB_real, TBF = temp[ 0], temp[ 1 ]
 		valor_guardado = PIB_real - vms
 		all_persons = list_persons_fc(registro=contas)
 		lismag = magnatas_fc(registro=contas)[ 0 ]
-		print(f"\n– *VMS🌐:* {currency(vms)}",
-			  f"– *Meta Selic/Tesouro💰:* {currency(PIB_real - vms)}",
-			  f"– *EMS✨:* {currency(ems)}",
-			  f"– *TBF🪙:*' {currency((PIB_real - vms) - vms)}",
-			  F"– *PIB_real💎:* {currency(PIB_real)}",
-			  f"– *PIB Per Capita:* *{currency(PIB_Per_Capita)}*\n"
-			  f"– *PIB Nominal:* *{currency(PIB_Nominal)}*\n"
-			  F"– *BOLSA DE VALORES📊:* {currency(bolsa)}\n"
-			  F"— *PIB_Per_Capita Mundial⚖️:* {currency(PIB_real / all_persons.__len__())}\n"
-			  F"– *ETF:* *{currency(ETF)}*"
+		print(f"\n– *VMS🌐:* {format_currency(vms, '' , locale='pt_br' )}",
+			  f"– *Meta Selic/Tesouro💰:* {format_currency(PIB_real - vms, '' , locale='pt_br' )}",
+			  f"– *EMS✨:* {format_currency(ems, '' , locale='pt_br' )}",
+			  f"– *TBF🪙:*' {format_currency((PIB_real - vms) - vms, '' , locale='pt_br' )}",
+			  F"– *PIB_real💎:* {format_currency(PIB_real, '' , locale='pt_br' )}",
+			  f"– *PIB Per Capita:* *{format_currency(PIB_Per_Capita, '' , locale='pt_br' )}*\n"
+			  f"– *PIB Nominal:* *{format_currency(PIB_Nominal, '' , locale='pt_br' )}*\n"
+			  F"– *BOLSA DE VALORES📊:* {format_currency(bolsa, '' , locale='pt_br' )}\n"
+			  F"— *PIB_Per_Capita Mundial⚖️:* {format_currency(PIB_real / all_persons.__len__(), '' , locale='pt_br' )}\n"
+			  F"– *ETF:* *{format_currency(ETF, '' , locale='pt_br' )}*"
 			  f"\n\n   ~-=-|~ *MAGNATAS*: ~|-=-~",
 			  "– {}\n".format(iterar(recort(lismag, 4), ', \n- ')),
 			  f"\n*VERIFICAÇÕES:*",
-			  f"_¬   Soma de todos PVMS: {currency(tot_pvms)}_ _{'é igual ao VMS.' if tot_pvms == vms else f'ATENÇÃO: Não é igual ao VMS. Isso significa que este registro não está valido! Diferença: {vms - tot_pvms}'}_",
-			  f"¬   _Soma de todas as taxas: {currency(tot_fee, 2)}_ ",
-			  f"¬   _VMS + META SELIC SEMPRE ser == {currency(PIB_real)}. Total: {currency(vms + (PIB_real - vms))}._ {'' if (vms + tesouro) == PIB_real else f'_ATENÇÃO: O resultado não é o valor guardado.. Este registro está dado como inválido._'}",
-			  f"¬   _Diferença entre VMS e META SELIC: {currency(tesouro - vms)} (TBF)_",
-			  F"¬  _Total de IPCA: {currency(IPCA)}_"
+			  f"_¬   Soma de todos PVMS: {format_currency(tot_pvms, '' , locale='pt_br' )}_ _{'é igual ao VMS.' if tot_pvms == vms else f'ATENÇÃO: Não é igual ao VMS. Isso significa que este registro não está valido! Diferença: {vms - tot_pvms}'}_",
+			  f"¬   _Soma de todas as taxas: {format_currency(tot_fee, '' , locale='pt_br' )}_ ",
+			  f"¬   _VMS + META SELIC SEMPRE ser == {format_currency(PIB_real, '' , locale='pt_br' )}. Total: {format_currency(vms + (PIB_real - vms), '' , locale='pt_br' )}._ {'' if (vms + tesouro) == PIB_real else f'_ATENÇÃO: O resultado não é o valor guardado.. Este registro está dado como inválido._'}",
+			  f"¬   _Diferença entre VMS e META SELIC: {format_currency(tesouro - vms, '' , locale='pt_br' )} (TBF)_",
+			  F"¬  _Total de IPCA: {format_currency(IPCA, '' , locale='pt_br' )}_"
 			  f"\n\n        ~-=-|~ *NOTAS:* ~|-=-~",
 			  f"– PVMS = Parte do Valor Mundial Situado: quanto uma certa seção representa do VMS;",
 			  F"- EMS = Total de EXP;",
@@ -164,7 +165,7 @@ def ver_contas(tipo_do_registro='Completo',
 						for name, saldo in persons.items():
 							print(f"\n - {name.title()}: ", end="")
 							for index, val in enumerate(saldo):
-								print(f" {currency(val)}{'$ / ' if (index % 2) == 0 else 'EXP'}", end="")
+								print(f" {format_currency(val, '' , locale='pt_br' )}{'$ / ' if (index % 2) == 0 else 'EXP'}", end="")
 						print(f"""\n		-━━━━━━━━━  ✠  ━━━━━━━━━-""")
 		print(f"Esta é uma versão simplificada do registro bancário NWM. Usada para atualizações rápidas,"
 			  f" pequenas conferências e exibição apenas do saldo e EXP de todos ladinos,"
@@ -238,9 +239,11 @@ def cadastrar_pandasdf(
 	# CADASTRAR NOVO INDIVIDUO:
 	# salva todos indivíduos em uma lista de listas / matriz:
 	ValuesToList = [ ]
+	lis_clas = []
 	for reino_, classes_ in contas.items():
 		if reino_ != 'none' != classes_:
 			for classe_, person in classes_.items():
+				lis_clas.append(classe_)
 				if person != 'none' != classe_:
 					for name_, saldo_ in person.items():
 						if name_ != 'none' != saldo_:
@@ -282,7 +285,6 @@ def cadastrar_pandasdf(
 		din, exp = float(din), float(exp)
 	# Verifica existencia da seção e da classe:
 	lis_sec = list(contas.keys())
-	lis_clas = [ list(clas.keys()) for clas in contas.values() ][ 0 ]
 	lis_person = [ ]
 	for classes in contas.values():
 		if classes != 'none':
@@ -293,7 +295,7 @@ def cadastrar_pandasdf(
 							lis_person.append(nome.lower())
 	if secao_selected not in lis_sec or classe_select not in lis_clas:
 		print(
-			f"\n - A seção '{secao_selected}' ou classe '{classe_select} 'não está incluída na var Contas/No registro.\n - {lis_clas=}\n{lis_sec=}")
+			f"\n -ATENÇÃO: \n A seção '{secao_selected}' ou classe '{classe_select} 'não está incluída na var Contas/No registro.\n - {lis_clas=}\n{lis_sec=}")
 		return None
 	# Caso uma pessoa existente seja selecionada, informa se deseja a substituição:
 	if nome_novo in lis_person:
