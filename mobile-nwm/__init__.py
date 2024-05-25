@@ -12,6 +12,7 @@ A primeira pergunta é entrar no modo básico ou avançado. Você pode descartar
 
 # Indica modo de uso:
 print('ENTRANDO EM MOBILE-N.W.M...\n')
+
 """pergunta = str(input(f"Deseja inizializar o modo Super-User(isto exige um carregamento extra de arquivos) ou o Modo Básico?\n"
 				 f"Digite 'S' para Super-User\n"
 				 f"Digite 'B' para uso básico do programa.\n>>> ")).strip().upper()
