@@ -1,2 +1,4 @@
-dependences
 pandas
+datetime
+babel
+__future__
