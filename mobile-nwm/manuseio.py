@@ -5,7 +5,9 @@ dir = 'START-NWM/mobile-nwm'
 complete_dir = path.abspath(path.expanduser(path.expandvars(".")))
 
 
-def criar_arquivo(local='START-NWM/mobile-nwm', nome_arquivo='registro.xlsx', colunas=[ '', 'REINO', 'CLASSE', 'PERSON', 'MONEY', 'EXP' ], mini_data=[['reino da folha', 'inu', 'meeh', 0, 0]], pandas=False):
+def criar_arquivo(local='START-NWM/mobile-nwm', nome_arquivo='registro.xlsx',
+				  colunas=[ '', 'REINO', 'CLASSE', 'PERSON', 'MONEY', 'EXP' ],
+				  mini_data=[ [ 'reino da folha', 'inu', 'meeh', 0, 0 ] ], pandas=False):
 	"""
 	Usado para ocorrencia de <create_file==True> para tentar criar o arquivo faltante
 	Returns:
@@ -15,7 +17,8 @@ def criar_arquivo(local='START-NWM/mobile-nwm', nome_arquivo='registro.xlsx', co
 
 	"""
 	from pandas import DataFrame
-	create_file, patch_atual, complete_archive, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo(criar=False, text=False, dir=local, arquivo=nome_arquivo, modo='w', pandas=pandas, test_open=True)
+	create_file, patch_atual, complete_archive, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo(
+		criar=False, text=False, dir=local, arquivo=nome_arquivo, modo='w', pandas=pandas, test_open=True)
 	if create_file is True and correspondencia in patch_atual:
 		if pandas is True:
 			# Crie o arquivo e Insere dados básicos:
@@ -38,7 +41,8 @@ def criar_arquivo(local='START-NWM/mobile-nwm', nome_arquivo='registro.xlsx', co
 	return create_file
 
 
-def localizar_arquivo(criar=False, text=False, dir='START-NWM/mobile-nwm', arquivo='registro.xlsx', modo='rb', pandas=False, test_open=True):
+def localizar_arquivo(criar=False, text=False, dir='START-NWM/mobile-nwm', arquivo='registro.xlsx', modo='rb',
+					  pandas=False, test_open=True):
 	"""
 	localiza o arquivo de registro de pps necessário para o uso básico do programa.
 	Args:
@@ -65,12 +69,13 @@ def localizar_arquivo(criar=False, text=False, dir='START-NWM/mobile-nwm', arqui
 	if patch_esperado in onde_ir and arquivo in onde_ir:
 		patch_esperado = complete_archive = onde_ir
 	find = onde_ir.find('START-NWM/')
-	onde_ir = path.join(onde_ir[0: find], correspondencia)
+	onde_ir = path.join(onde_ir[ 0: find ], correspondencia)
 	if correspondencia not in patch_atual:
 		chdir(onde_ir)
 		patch_atual = getcwd()
 	complete_archive = path.join(onde_ir, arquivo)
-	#print(f"\n{complete_archive=}\n{onde_ir=}\n{correspondencia=}\n{patch_atual=}")
+
+	# print(f"\n{complete_archive=}\n{onde_ir=}\n{correspondencia=}\n{patch_atual=}")
 	def abrir():
 		if correspondencia in patch_atual:
 			try:
@@ -91,12 +96,15 @@ def localizar_arquivo(criar=False, text=False, dir='START-NWM/mobile-nwm', arqui
 						create_file = True
 		else:
 			if text is True:
-				print(f"O diretório atual não é o diretório esperado para correr o script manuseio.py corretamente.")  # MSG
+				print(
+					f"O diretório atual não é o diretório esperado para correr o script manuseio.py corretamente.")  # MSG
 				print(f"Diretório atual: {patch_atual}\n Diretório esperado: {onde_ir}")  # INFO
-				print(f"Tente encontrar ou então criar o diretório esperado, alocar o arquivo 'manuseio.py' para criar 'registro.xlsx'.")  # SOLUTION
+				print(
+					f"Tente encontrar ou então criar o diretório esperado, alocar o arquivo 'manuseio.py' para criar 'registro.xlsx'.")  # SOLUTION
 				print(f"Este erro pode ser evitado caso siga o código do github. Caso esteja realmente seguindo o "
 					  f"código do github sem quaisquer mudanças e esteja vendo este erro, crie um 'issue'.")  # COMMENT
 			create_file = True
+
 	if test_open is True or criar is True:
 		abrir()
 	return [ create_file, patch_atual, complete_archive, patch_esperado, correspondencia, onde_ir, arquivo_retornado ]
@@ -114,7 +122,9 @@ def obter_arquivo(local=None, arquivo=None, modo='rb', pandas=False):
 
 	"""
 	if arquivo is None or local is None:
-		create_file, patch_atual, complete_archive, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo(criar=False, text=False, dir='START-NWM/mobile-nwm', arquivo='registro.xlsx', modo='rb', pandas=False, test_open=True)
+		create_file, patch_atual, complete_archive, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo(
+			criar=False, text=False, dir='START-NWM/mobile-nwm', arquivo='registro.xlsx', modo='rb', pandas=False,
+			test_open=True)
 	# Captura do registro bancário:
 	for tentativa in range(1, 4):
 		print(f"{tentativa=}")
@@ -130,24 +140,28 @@ def obter_arquivo(local=None, arquivo=None, modo='rb', pandas=False):
 				criar=True, text=True, dir=local, arquivo=arquivo, modo=modo,
 				pandas=pandas, test_open=True)
 		else:
-			if arquivo=='registro.xlsx':
+			if arquivo == 'registro.xlsx':
 				# Tenta ultima vez no modo básico:
 				funcionamento_basico = True
 				colunas = [ 'REINO', 'CLASSE', 'PERSON', 'MONEY', 'EXP' ]
-				create_file, patch_atual, complete_archive, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo(criar=True, text=True, dir=dir, arquivo='registro.xlsx', modo='w', pandas=False, test_open=True)
+				create_file, patch_atual, complete_archive, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo(
+					criar=True, text=True, dir=dir, arquivo='registro.xlsx', modo='w', pandas=False, test_open=True)
 				if create_file is True:
 					c_file = criar_arquivo()
 					if c_file is True:
 						print(f"Não foi possivel continuar o programa pois houve problemas na captura do registro.")
-						# exit & break
-				print(f"Conseguimos tratar problemas de inicialização nivel 1 do programa e botamos o script em modo básico.")
+				# exit & break
+				print(
+					f"Conseguimos tratar problemas de inicialização nivel 1 do programa e botamos o script em modo básico.")
 				return None
-			elif arquivo=="BACKUP.txt":
-				create_file, patch_atual, complete_archive, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo(criar=True, text=True, dir=dir, arquivo='BACKUP.txt', modo='w', pandas=False, test_open=True)
-	return [create_file, patch_atual, complete_archive, patch_esperado, correspondencia, onde_ir, arquivo_retornado ]
+			elif arquivo == "BACKUP.txt":
+				create_file, patch_atual, complete_archive, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo(
+					criar=True, text=True, dir=dir, arquivo='BACKUP.txt', modo='w', pandas=False, test_open=True)
+	return [ create_file, patch_atual, complete_archive, patch_esperado, correspondencia, onde_ir, arquivo_retornado ]
 
 
-def valuestolist(operation=None, df=False, contas={'reino da folha': {'inu': {'meeh': [ 0, 0 ]}}}, vtl=['reino da folha', 'inu', 'meeh', 0, 0]):
+def valuestolist(operation=None, df=False, contas={'reino da folha': {'inu': {'meeh': [ 0, 0 ]}}},
+				 vtl=[ 'reino da folha', 'inu', 'meeh', 0, 0 ]):
 	"""
 
 	Args:
@@ -171,17 +185,18 @@ def valuestolist(operation=None, df=False, contas={'reino da folha': {'inu': {'m
 					money = saldo[ 0 ]
 					exp = saldo[ 1 ]
 					ValuesToList.append(
-						[ str(reino).lower().strip(), str(classe).lower().strip(), str(name).lower().strip(),  str(money).lower().strip(), str(exp).lower().strip() ])
+						[ str(reino).lower().strip(), str(classe).lower().strip(), str(name).lower().strip(),
+						  str(money).lower().strip(), str(exp).lower().strip() ])
 					c += 1
 		vtl = ValuesToList
-		#print(f"{ValuesToList =} ")
+	# print(f"{ValuesToList =} ")
 	elif operation == 2:
 		"""string(contas) to VTL"""
 		contas = str(contas)
 		contas = contas.replace('{', '').replace('}', '').replace('[', '').replace('"', '').replace(
 			"'", "").replace(']', '').replace(': ', ':').strip()
 		ValuesToList = contas.split(':')
-		if ',' in ValuesToList[-1]:
+		if ',' in ValuesToList[ -1 ]:
 			saldo = ValuesToList[ -1 ].replace(' ', '').split(',')
 			ValuesToList[ -1 ] = saldo[ 0 ]
 			ValuesToList.append(saldo[ -1 ])
@@ -219,20 +234,19 @@ def valuestolist(operation=None, df=False, contas={'reino da folha': {'inu': {'m
 			contas = reinos
 	else:
 		print(F"argumento 'operation', inválido.")
-	return [contas, vtl]
-
+	return [ contas, vtl ]
 
 
 def convet_xlsx_to_contas(local=None, nome_arquivo=None, modo='rb'):
 	if local is None:
 		if nome_arquivo is None:
-			nome_arquivo='registro.xlsx'
+			nome_arquivo = 'registro.xlsx'
 		create_file, patch_atual, complete_archive, patch_esperado, correspondencia, onde_ir, arquivo_retornado = localizar_arquivo(
 			criar=False, text=False, arquivo=nome_arquivo, modo='rb',
 			pandas=False, test_open=False)
 		local = onde_ir
 	else:
-		complete_archive = os.path.join(local, nome_arquivo)
+		complete_archive = path.join(local, nome_arquivo)
 	# Pega o arquivo 'registro.xlsx'
 	from pandas import read_excel
 	with open(complete_archive, modo) as arquivo:
@@ -241,18 +255,18 @@ def convet_xlsx_to_contas(local=None, nome_arquivo=None, modo='rb'):
 		ValuesToList = df.values.tolist()
 	# Converte para uso:
 	reinos = dict(dict(dict()))
-	reinos_alocados = []
-	classes_alocadas: list[Any] = []
+	reinos_alocados = [ ]
+	classes_alocadas: list[ Any ] = [ ]
 	for cont, line in enumerate(ValuesToList):
 		if type(line[ 0 ]) == type(int()):
 			reino = str(line[ 1 ]).lower().strip()
 			classe = str(line[ 2 ]).lower().strip()
-			pp = str(line[ 3]).lower().strip()
-			money = str(line[4]).lower().strip()
-			exp = str(line[5]).lower().strip()
+			pp = str(line[ 3 ]).lower().strip()
+			money = str(line[ 4 ]).lower().strip()
+			exp = str(line[ 5 ]).lower().strip()
 		else:
 			reino, classe, pp, money, exp = line
-			reino, classe, pp = [reino.lower(), classe.lower(), pp.lower()]
+			reino, classe, pp = [ reino.lower(), classe.lower(), pp.lower() ]
 		if cont == 0:
 			reinos_alocados.append(reino)
 			reinos[ reino ] = {classe: {pp: [ money, exp ]}}
@@ -271,8 +285,9 @@ def convet_xlsx_to_contas(local=None, nome_arquivo=None, modo='rb'):
 	return reinos
 
 
-def convert_contas_to_xlsx(contas={'reino da folha': {'inu': {'meeh': [ 0, 0 ]}}}, modo='w', nome_arquivo=f'{complete_dir}/registro.xlsx',
-						   colunas=['REINO', 'CLASSE', 'PERSON', 'MONEY', 'EXP' ], verificar=False):
+def convert_contas_to_xlsx(contas={'reino da folha': {'inu': {'meeh': [ 0, 0 ]}}}, modo='w',
+						   nome_arquivo=f'{complete_dir}/registro.xlsx',
+						   colunas=[ 'REINO', 'CLASSE', 'PERSON', 'MONEY', 'EXP' ], verificar=False):
 	"""
 	Salva 'Contas' (dict usado como classe para operações o programa) em um arquivo Excel
 	Args:
@@ -294,7 +309,7 @@ def convert_contas_to_xlsx(contas={'reino da folha': {'inu': {'meeh': [ 0, 0 ]}}
 	else:
 		print(F"A variável 'contas' não está correta.")
 		return None
-	ValuesToList = valuestolist(operation, contas=contas)[-1]
+	ValuesToList = valuestolist(operation, contas=contas)[ -1 ]
 	df = DataFrame(ValuesToList, columns=colunas)
 	print(f"{df=}")
 	# Salva:
@@ -302,21 +317,24 @@ def convert_contas_to_xlsx(contas={'reino da folha': {'inu': {'meeh': [ 0, 0 ]}}
 	b = df.to_excel(writer)
 	colunas_atuais = list(df.columns)
 	if colunas_atuais != colunas:
-		print(f"\nHouve uma mudança nas colunas do arquivo: {colunas_atuais=}. Isto pode impactar em incompatibilidades "
-			  "em outras funções. Ajuste o arquivo, ou lembre-se de ajustar o parâmetro 'colunas' de cada função que as usa.")
+		print(
+			f"\nHouve uma mudança nas colunas do arquivo: {colunas_atuais=}. Isto pode impactar em incompatibilidades "
+			"em outras funções. Ajuste o arquivo, ou lembre-se de ajustar o parâmetro 'colunas' de cada função que as usa.")
 	c = writer.close()
 	# Verifica se deu certo:
 	if verificar is True:
 		def verificar():
 			contas2 = convet_xlsx_to_contas(nome_arquivo=nome_arquivo)
 			if contas2 == contas:
+				desc = 'Arquivo foi atualizado com sucesso.'
 				print(f"Arquivo foi atualizado com sucesso.")
 				for letra in str(contas):
 					for letra2 in str(contas2):
-						if letra != letra2:
+						if letra == letra2:
 							print(letra, end="")
 			else:
-				print(f"O arquivo não foi atualizado corretamente.")
+				desc = "O arquivo não foi atualizado corretamente."
+				print(desc)
 				print(f"{contas=}\n{contas2=}\n Iguais?: {contas==contas2=}")
 				'''import xlsxwriter
 				workbook = xlsxwriter.Workbook(nome_arquivo)
@@ -328,13 +346,13 @@ def convert_contas_to_xlsx(contas={'reino da folha': {'inu': {'meeh': [ 0, 0 ]}}
 						worksheet.write(row_num, col_num, col_data)
 				workbook.close()'''
 		verificar()
-	return 
+	return None
 
 
-
-def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup=[['REG', '22/05/2024-14:00:01', {'none': {'none': {'none': ['none', 'none']}}}]]):
+def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt',
+					ListBackup=[ [ 'REG', '22/05/2024-14:00:01', 'None backup', {'none': {'none': {'none': [ 'none', 'none' ]}}} ] ]):
 	"""
-	operações sobre o arquivo BACKUP.txt, cujo armazena registros antigos e outras variáveis. 
+	operações sobre o arquivo BACKUP.txt, cujo armazena registros antigos e outras variáveis.
 	Args:
 		operation: str | int
 			'C' | 1 | 'CAPTURE' == capturar backup
@@ -349,7 +367,8 @@ def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup
 
 	"""
 	op = str(operation).upper().strip()
-	def LB_to_strbackup(ListBackup:list=ListBackup):
+
+	def LB_to_strbackup(ListBackup: list = ListBackup):
 		"""
 		Convert ListBackup to strBackup for write this str in a 'BACKUP.txt' file
 		Args:
@@ -357,13 +376,13 @@ def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup
 
 		Returns: strBackup : str([['TIPO,-,DATE,-,VAR\n'], ['TIPO,-,DATE,VAR\n'], ...])
 		"""
-		strBackup = []
+		strBackup = [ ]
 		for itens in ListBackup:
-			strB = f"{itens[0]},-,{itens[1]},-,{itens[-1]}\n"
+			strB = f"{itens[ 0 ]},-,{itens[ 1 ]},-,{itens[2]},-,{itens[ -1 ]}\n"
 			if strB not in strBackup:
-				strBackup.append([strB.replace('\n\n', '')])
+				strBackup.append([ strB.replace('\n\n', '') ])
 		return strBackup
-	
+
 	def strB_to_writebackup(strBackup):
 		"""
 		convert strBackup to a writable variable to write in 'BACKUP.txt' file
@@ -378,7 +397,6 @@ def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup
 			WriteBackup = WriteBackup.join(line)
 		return WriteBackup.replace('\n\n', '')
 
-
 	def strB_to_listbackup(strBackup):
 		"""
 		convert strBackup into a ListBackup
@@ -388,26 +406,26 @@ def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup
 		Returns: ListBackup : list([[tipo, data, contas], [tipo, data, var], ...)
 
 		"""
-		ListBackup = []
+		ListBackup = [ ]
 		for line in strBackup:
-			sep = str(line).strip().replace('["', '').replace(']"', '').replace('\n', '').replace('\\n', '\n').split(',-,')
+			sep = str(line).strip().replace('["', '').replace(']"', '').replace('\n', '').replace('\\n', '\n').split(
+				',-,')
 			for pos, element in enumerate(sep):
 				if pos == 0:
 					tipo = element.strip().upper()
-				if pos == 1:
+				elif pos == 1:
 					data = element.strip()
-				if pos == 2:
-
+				elif pos == 2:
+					comment = element.strip().title()
+				elif pos == 3:
 					if tipo.strip().upper() == 'REG':
 						ValuesToList = valuestolist(operation=2, contas=element)[ -1 ]
 						item = valuestolist(operation=1, vtl=ValuesToList)[ 0 ]
 					else:
 						item = element.strip()
-					ListBackup.append([ tipo, data, item ])
-					print(item)
+					ListBackup.append([ tipo, data, comment, item ])
 				print(f"strB_to_listbackup - {ListBackup = }")
 		return ListBackup
-
 
 	def capture_bc():
 		"""Captura BACKUP.txt retornando ListBackup, e cria caso não exista"""
@@ -427,7 +445,6 @@ def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup
 			print(f"{ListBackup = }")
 		return ListBackup
 
-
 	def format_bc():
 		"""escreve em BACKUP.txt retornando WriteBackup, e cria caso não exista"""
 		LB_antigo = capture_bc()
@@ -436,7 +453,7 @@ def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup
 			return None
 		if local is None:
 			complete_archive = localizar_arquivo(criar=True, text=False, dir=dir,
-												 arquivo=arquivo, modo='a',pandas=False, test_open=True)[2]
+												 arquivo=arquivo, modo='a', pandas=False, test_open=True)[ 2 ]
 		else:
 			from os.path import join
 			complete_archive = join(local, arquivo)
@@ -444,20 +461,20 @@ def manuseio_backup(operation=None, local=None, arquivo='BACKUP.txt', ListBackup
 		strBackup = LB_to_strbackup(ListBackup)
 		WriteBackup = strB_to_writebackup(strBackup)
 		print(f" {strBackup=}\n{WriteBackup=}\n{ListBackup=}\n{LB_antigo = }")
-		if op in ['2', 'A', 'ADD']:
-			adicionados = []
+		if op in [ '2', 'A', 'ADD' ]:
+			adicionados = [ ]
 			with open(complete_archive, 'a') as arq:
 				for strB in strBackup:
 					if strB not in adicionados:
 						adicionados.append(strB)
-						arq.write(strB[0])
-		elif op in ['3', 'F', 'FORMAT']:
+						arq.write(strB[ 0 ])
+		elif op in [ '3', 'F', 'FORMAT' ]:
 			with open(complete_archive, 'w') as arq:
 				arq.write(WriteBackup)
 		return WriteBackup
 
-	if op == '1' or op == 'C' or op == 'CAPTURE': # Capturar backup:
+	if op == '1' or op == 'C' or op == 'CAPTURE':  # Capturar backup:
 		return capture_bc()
-	elif op in ['2', 'A', 'ADD', '3', 'F', 'FORMAT']: # Salvar Backup
+	elif op in [ '2', 'A', 'ADD', '3', 'F', 'FORMAT' ]:  # Salvar Backup
 		return format_bc()
 
