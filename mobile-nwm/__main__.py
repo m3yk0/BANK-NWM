@@ -1,4 +1,4 @@
-from __init__ import funcionamento_basico
+# To V4.6.1 >> v4 of this code
 import Historico
 import Usages
 from Funcs import atual_data
@@ -290,3 +290,4 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
