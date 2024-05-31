@@ -1141,4 +1141,3 @@ def feitosemon():
 
 def mundar_todas_captais():
 	pass
-
