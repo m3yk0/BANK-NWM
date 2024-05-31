@@ -202,6 +202,7 @@ def main():
 			i, *args = escolha.split(' ')
 			return run(i, contas=contas)
 
+
 	while True:
 		bad_escolhas = [ ]
 		loops += 1
@@ -289,4 +290,3 @@ def main():
 
 if __name__ == "__main__":
 	main()
-
