@@ -1,6 +1,5 @@
-
 """
-
+To v (4.6.1 of Bank-Mobile), V 5 of this code
 FUNCS == ARQUIVO QUE MANUSEIA O OBJETO `REGISTRO`
 """
 
