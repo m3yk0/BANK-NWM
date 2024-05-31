@@ -1,3 +1,6 @@
+"""
+v 4.6.1(Bank) - V3 of this code
+"""
 from __future__ import annotations
 from __init__ import funcionamento_basico
 from manuseio import localizar_arquivo
@@ -1141,3 +1144,4 @@ def feitosemon():
 
 def mundar_todas_captais():
 	pass
+
